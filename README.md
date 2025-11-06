@@ -12,7 +12,7 @@ https://docs.astral.sh/uv/getting-started/installation/
 
 ```bash
 uv sync --group dev
-echo "FLASK_DEBUG=True\nSECRET_KEY=dev_secret_key\nWTF_CSRF_SECRET_KEY=dev_csrf_secret_key" >> .env.local
+echo "FLASK_DEBUG=True\nSECRET_KEY=dev_secret_key\nWTF_CSRF_SECRET_KEY=dev_csrf_secret_key" >> .env
 uv run flask db upgrade
 uv run flask run
 ```
