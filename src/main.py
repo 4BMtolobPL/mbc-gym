@@ -23,6 +23,12 @@ def create_app(env: str = "development"):
     Migrate(app, db)
     csrf.init_app(app)
 
+    from src.domain.auth import views as auth_views
+    from src.domain.user import views as user_views
+
+    app.register_blueprint(auth_views.auth_views, url_prefix="/auth")
+    app.register_blueprint(user_views.user_views, url_prefix="/user")
+
     @app.get("/favicon.ico")
     def favicon():
         return send_from_directory(
