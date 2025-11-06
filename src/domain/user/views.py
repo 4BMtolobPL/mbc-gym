@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import login_user, login_required
+from flask_login import login_user
 
 from src.domain.user.forms import SignUpForm
 from src.domain.user.models import User
@@ -8,12 +8,6 @@ from src.main import db
 user_views = Blueprint(
     "user", __name__, template_folder="templates", static_folder="static"
 )
-
-
-@user_views.get("/")
-@login_required
-def index():
-    return render_template("user/index.html")
 
 
 @user_views.route("/signup", methods=["GET", "POST"])
