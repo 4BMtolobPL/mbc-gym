@@ -30,9 +30,11 @@ def create_app(env: str = "development"):
 
     from src.domain.auth import views as auth_views
     from src.domain.user import views as user_views
+    from src.domain.detector import views as detector_views
 
     app.register_blueprint(auth_views.auth_views, url_prefix="/auth")
     app.register_blueprint(user_views.user_views, url_prefix="/user")
+    app.register_blueprint(detector_views.detector_views, url_prefix="/detector")
 
     @app.get("/favicon.ico")
     def favicon():
