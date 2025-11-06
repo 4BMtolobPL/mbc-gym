@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, url_for
+from flask import Blueprint, render_template, flash, url_for, request
 from flask_login import login_user, logout_user
 from werkzeug.utils import redirect
 
@@ -18,7 +18,11 @@ def login():
 
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
-            return redirect(url_for("detector.index"))
+
+            next_page = request.args.get("next")
+            if next_page is None or not next_page.startswith("/"):
+                next_page = url_for("detector.index")
+            return redirect(next_page)
         else:
             flash("Invalid email or password")
 

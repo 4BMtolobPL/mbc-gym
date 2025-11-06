@@ -31,6 +31,6 @@ def signup():
 
         next_page = request.args.get("next")
         if next_page is None or not next_page.startswith("/"):
-            next_page = url_for("auth.index")
+            next_page = url_for("detector.index")
         return redirect(next_page)
     return render_template("user/signup.html", form=form)
