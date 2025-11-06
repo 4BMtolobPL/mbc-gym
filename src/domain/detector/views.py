@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, send_from_directory, current_app
 
 from src.domain.detector.models import UserImage
 from src.domain.user.models import User
@@ -9,7 +9,7 @@ detector_views = Blueprint(
 )
 
 
-@detector_views.route("/")
+@detector_views.get("/")
 def index():
     user_images = (
         db.session.query(User, UserImage)
@@ -19,3 +19,8 @@ def index():
     )
 
     return render_template("detector/index.html", user_images=user_images)
+
+
+@detector_views.get("/images/<path:filename>")
+def image_files(filename):
+    return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename)
