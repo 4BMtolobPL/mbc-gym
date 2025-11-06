@@ -1,4 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, flash, url_for
+from flask_login import login_required, login_user, logout_user
+from werkzeug.utils import redirect
+
+from src.domain.auth.forms import LoginForm
+from src.domain.user.models import User
 
 auth_views = Blueprint(
     "auth", __name__, template_folder="templates", static_folder="static"
@@ -6,5 +11,27 @@ auth_views = Blueprint(
 
 
 @auth_views.get("/")
+@login_required
 def index():
     return render_template("auth/index.html")
+
+
+@auth_views.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+
+        if user is not None and user.verify_password(form.password.data):
+            login_user(user)
+            return redirect(url_for("user.index"))
+        else:
+            flash("Invalid email or password")
+
+    return render_template("auth/login.html", form=form)
+
+
+@auth_views.get("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("auth.login"))
