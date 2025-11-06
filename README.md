@@ -39,3 +39,9 @@ uv add <package-name>
 ```bash
 uv add --group dev <package-name> 
 ```
+
+## Database
+```bash
+uv run flask db migrate
+uv run flask db upgrade
+```
