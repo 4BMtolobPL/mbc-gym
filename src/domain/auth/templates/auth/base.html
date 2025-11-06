@@ -7,6 +7,14 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+<header>
+    {% if current_user.is_authenticated %}
+    <p>
+        <span>{{ current_user.username }}</span>
+        <span><a href="{{ url_for('auth.logout') }}">Logout</a></span>
+    </p>
+    {% endif %}
+</header>
 {% block content %}{% endblock %}
 </body>
 </html>
