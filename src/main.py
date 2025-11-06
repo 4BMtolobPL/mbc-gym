@@ -1,24 +1,23 @@
 import os
-from pathlib import Path
 
 from flask import Flask, send_from_directory
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 
+from src.config.config import config
+
 db = SQLAlchemy()
 csrf = CSRFProtect()
 
 
-def create_app():
+def create_app(env: str = "development"):
     app = Flask(__name__)
 
-    # app.config.from_object("src.config.Config")
-    app.config.from_mapping(
-        SQLALCHEMY_DATABASE_URI=f"sqlite:///{Path(__file__).parent.parent / 'local.sqlite'}",
-        SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        SQLALCHEMY_ECHO=True,
-    )
+    if env in config:
+        app.config.from_object(config[env])
+    else:
+        raise ValueError(f"Unknown environment: {env}")
 
     db.init_app(app)
     Migrate(app, db)
