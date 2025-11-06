@@ -8,9 +8,7 @@
     <p class="msg-flash">{{ message }}</p>
     {% endfor %}
     {{ form.csrf_token }}
-    <p>
-        {{ form.username.label }}
-        {{ form.username(size=30, palceholder="Username") }}
+    <p>{{ form.username.label }} {{ form.username(size=30, placeholder="Username") }}
     </p>
     {% for error in form.username.errors %}
     <span class="msg-err">{{ error }}</span>
