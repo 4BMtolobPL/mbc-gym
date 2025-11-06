@@ -8,6 +8,15 @@
 
 https://docs.astral.sh/uv/getting-started/installation/
 
+## Quickstart
+
+```bash
+uv sync --group dev
+echo "FLASK_DEBUG=True\nSECRET_KEY=dev_secret_key\nWTF_CSRF_SECRET_KEY=dev_csrf_secret_key" >> .env.local
+uv run flask db upgrade
+uv run flask run
+```
+
 ## Installation
 
 ### 의존성 설치
@@ -41,6 +50,7 @@ uv add --group dev <package-name>
 ```
 
 ## Database
+
 ```bash
 uv run flask db migrate
 uv run flask db upgrade
