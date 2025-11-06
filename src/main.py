@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, send_from_directory
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
@@ -9,6 +10,9 @@ from src.config.config import config
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
+login_manager = LoginManager()
+login_manager.login_view = "auth.login"  # TODO: 미로그인 상태로 접근제한 페이지에 접속시 리다이렉트 할 엔드포인트
+login_manager.login_message = ""
 
 
 def create_app(env: str = "development"):
@@ -22,6 +26,7 @@ def create_app(env: str = "development"):
     db.init_app(app)
     Migrate(app, db)
     csrf.init_app(app)
+    login_manager.init_app(app)
 
     from src.domain.auth import views as auth_views
     from src.domain.user import views as user_views
