@@ -21,3 +21,17 @@ class UserImage(db.Model):
     )
 
     user: Mapped["User"] = relationship(back_populates="images")
+
+
+class UserImageTag(db.Model):
+    __tablename__ = "user_image_tags"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_image_id: Mapped[int] = mapped_column(ForeignKey("user_images.id"))
+    tag_name: Mapped[str] = mapped_column()
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        default=datetime.datetime.now(datetime.UTC)
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        default=datetime.datetime.now(datetime.UTC),
+        onupdate=datetime.datetime.now(datetime.UTC),
+    )
