@@ -377,3 +377,4 @@ pyrightconfig.json
 local.sqlite
 testing.sqlite
 src/uploads
+models/
