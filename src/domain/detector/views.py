@@ -31,6 +31,16 @@ detector_views = Blueprint(
 )
 
 
+@detector_views.errorhandler(404)
+def page_not_found(e):
+    return render_template("detector/404.html"), 404
+
+
+@detector_views.errorhandler(500)
+def internal_server_error(e):
+    return render_template("detector/500.html"), 500
+
+
 @detector_views.get("/")
 def index():
     user_images = (
