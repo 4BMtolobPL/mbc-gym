@@ -20,7 +20,7 @@ from flask import (
 from flask_login import login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError
 
-from src.domain.detector.forms import UploadImageForm, DetectorForm
+from src.domain.detector.forms import UploadImageForm, DetectorForm, DeleteForm
 from src.domain.detector.models import UserImage, UserImageTag
 from src.domain.user.models import User
 from src.main import db
@@ -50,12 +50,14 @@ def index():
         user_image_tag_dict[user_image.UserImage.id] = user_image_tags
 
     detector_form = DetectorForm()
+    delete_form = DeleteForm()
 
     return render_template(
         "detector/index.html",
         user_images=user_images,
         user_image_tag_dict=user_image_tag_dict,
         detector_form=detector_form,
+        delete_form=delete_form,
     )
 
 
@@ -199,9 +201,26 @@ def detect(image_id: int):
     try:
         save_detected_image_tags(user_image, tags, detected_image_file_name)
     except SQLAlchemyError as e:
-        flash("Database error")
+        flash("Error occurred on save image")
         db.session.rollback()
         current_app.logger.error(e)
         return redirect(url_for("detector.index"))
+
+    return redirect(url_for("detector.index"))
+
+
+@detector_views.post("/images/delete/<int:image_id>")
+@login_required
+def delete_image(image_id: int):
+    try:
+        db.session.query(UserImageTag).filter(
+            UserImageTag.user_image_id == image_id
+        ).delete()
+        db.session.query(UserImage).filter(UserImage.id == image_id).delete()
+        db.session.commit()
+    except SQLAlchemyError as e:
+        flash("Error occurred on delete image")
+        current_app.logger.error(e)
+        db.session.rollback()
 
     return redirect(url_for("detector.index"))
