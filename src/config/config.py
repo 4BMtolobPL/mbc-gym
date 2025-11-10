@@ -128,8 +128,9 @@ class TestingConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{basedir / 'testing.sqlite'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
-    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SECRET_KEY = "TEST_SECRET_KEY"
     WTF_CSRF_ENABLED = False
+    UPLOAD_FOLDER = str(Path(basedir, "tests", "detector", "uploads"))
 
 
 config = {
