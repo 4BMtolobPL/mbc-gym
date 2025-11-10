@@ -1,7 +1,8 @@
 import datetime
+from typing import List
 
 from flask_login import UserMixin
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from src.main import db, login_manager
@@ -20,6 +21,10 @@ class User(db.Model, UserMixin):
     updated_at: Mapped[datetime.datetime] = mapped_column(
         default=datetime.datetime.now(datetime.UTC),
         onupdate=datetime.datetime.now(datetime.UTC),
+    )
+
+    images: Mapped[List["UserImage"]] = relationship(
+        back_populates="user", order_by="desc(UserImage.id)"
     )
 
     @property

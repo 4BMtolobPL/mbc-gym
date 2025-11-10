@@ -1,26 +1,21 @@
 {% extends 'user/base.html' %}
 {% block title %}Sign Up{% endblock %}
 {% block content %}
-<h2>Sign Up</h2>
-
-<form method="POST" action="{{ url_for('user.signup', next=request.args.get('next')) }}" novalidate="novalidate">
-    {% for message in get_flashed_messages() %}
-    <p class="msg-flash">{{ message }}</p>
-    {% endfor %}
-    {{ form.csrf_token }}
-    <p>{{ form.username.label }} {{ form.username(size=30, placeholder="Username") }}
-    </p>
-    {% for error in form.username.errors %}
-    <span class="msg-err">{{ error }}</span>
-    {% endfor %}
-    <p>{{ form.email.label }} {{ form.email(placeholder="Email") }}</p>
-    {% for error in form.email.errors %}
-    <span class="msg-err">{{ error }}</span>
-    {% endfor %}
-    <p>{{ form.password.label }} {{ form.password(placeholder="Password") }}</p>
-    {% for error in form.password.errors %}
-    <span class="msg-err">{{ error }}</span>
-    {% endfor %}
-    <p>{{ form.submit() }}</p>
-</form>
+<div class="mx-auto dt-auth-main">
+    <div class="card dt-auth-signup">
+        <header><h2>Sign up</h2></header>
+        <section>
+            <form class="form-signin" method="POST" action="{{ url_for('user.signup', next=request.args.get('next')) }}" novalidate="novalidate">
+                {{ form.csrf_token }}
+                {% for message in get_flashed_messages() %}
+                <div class="dt-auth-flash">{{ message }}</div>
+                {% endfor %}
+                {{ form.username(size=30, class="form-control dt-auth-input", placeholder="Username") }}
+                {{ form.email(class="form-control dt-auth-input", placeholder="Email") }}
+                {{ form.password(class="form-control dt-auth-input", placeholder="Password") }}
+                {{ form.submit(class="btn btn-md btn-primary d-block dt-auth-btn") }}
+            </form>
+        </section>
+    </div>
+</div>
 {% endblock %}

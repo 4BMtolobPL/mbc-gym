@@ -55,3 +55,17 @@ uv add --group dev <package-name>
 uv run flask db migrate
 uv run flask db upgrade
 ```
+
+## Download model
+
+class MaskRCNN_ResNet50_FPN_V2_Weights:
+pass
+
+```python
+import torch
+import torchvision
+from torchvision.models.detection import MaskRCNN_ResNet50_FPN_V2_Weights
+
+model = torchvision.models.detection.maskrcnn_resnet50_fpn_v2(weights=MaskRCNN_ResNet50_FPN_V2_Weights.DEFAULT)
+torch.save(model, "models/model.pt")
+```

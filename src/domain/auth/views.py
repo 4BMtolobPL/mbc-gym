@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, flash, url_for
-from flask_login import login_required, login_user, logout_user
+from flask import Blueprint, render_template, flash, url_for, request
+from flask_login import login_user, logout_user
 from werkzeug.utils import redirect
 
 from src.domain.auth.forms import LoginForm
@@ -10,12 +10,6 @@ auth_views = Blueprint(
 )
 
 
-@auth_views.get("/")
-@login_required
-def index():
-    return render_template("auth/index.html")
-
-
 @auth_views.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -24,7 +18,11 @@ def login():
 
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
-            return redirect(url_for("user.index"))
+
+            next_page = request.args.get("next")
+            if next_page is None or not next_page.startswith("/"):
+                next_page = url_for("detector.index")
+            return redirect(next_page)
         else:
             flash("Invalid email or password")
 

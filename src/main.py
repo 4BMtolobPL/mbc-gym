@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -28,11 +28,16 @@ def create_app(env: str = "development"):
     csrf.init_app(app)
     login_manager.init_app(app)
 
+    app.register_error_handler(404, page_not_found)
+    app.register_error_handler(500, internal_server_error)
+
     from src.domain.auth import views as auth_views
     from src.domain.user import views as user_views
+    from src.domain.detector import views as detector_views
 
     app.register_blueprint(auth_views.auth_views, url_prefix="/auth")
     app.register_blueprint(user_views.user_views, url_prefix="/user")
+    app.register_blueprint(detector_views.detector_views, url_prefix="/detector")
 
     @app.get("/favicon.ico")
     def favicon():
@@ -43,3 +48,21 @@ def create_app(env: str = "development"):
         )
 
     return app
+
+
+def page_not_found(e):
+    """
+    404 Not Found
+    :param e:
+    :return:
+    """
+    return render_template("404.html"), 404
+
+
+def internal_server_error(e):
+    """
+    500 Internal Server Error
+    :param e:
+    :return:
+    """
+    return render_template("500.html"), 500
