@@ -199,7 +199,7 @@ def save_detected_image_tags(
 @detector_views.post("/detect/<int:image_id>")
 @login_required
 def detect(image_id: int):
-    user_image: UserImage = UserImage.query.get(image_id)
+    user_image: UserImage = db.session.get(UserImage, image_id)
 
     if user_image is None:
         flash("Image not found")
